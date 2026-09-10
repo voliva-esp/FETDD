@@ -151,7 +151,7 @@ def run_vqe(num_qubits, depth, iterations, learning_rate, seed,
 
     print(f"N={num_qubits}, D={depth}, parameters={len(parameters)}")
     print(f"Exact ground-state energy: {exact_energy:.12f}")
-    print("iteration          energy          error       max|gradient|              Time(s)")
+    print("iteration\tenergy\terror\tmax|gradient|\tTime(s)")
     t = time()
 
     for iteration in range(iterations):
@@ -163,9 +163,9 @@ def run_vqe(num_qubits, depth, iterations, learning_rate, seed,
         if iteration % print_every == 0 or iteration == iterations - 1:
             t2 = time()
             print(
-                f"{iteration:9d}  {current_energy: .12f}  "
-                f"{current_energy - exact_energy: .3e}  "
-                f"{np.max(np.abs(gradient)): .3e} "
+                f"{iteration:9d}  {current_energy: .12f}\t"
+                f"{current_energy - exact_energy: .3e}\t"
+                f"{np.max(np.abs(gradient)): .3e}\t"
                 f"\t{t2 - t}"
             )
             t = t2
