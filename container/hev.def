@@ -36,7 +36,7 @@ From: ubuntu:26.04
     pip install -r requirements.txt
     rm -rf /.pip-tmp
 
-    cd /source/cpp/
+    cd source/cpp/
     mkdir build
     cd build
     cmake ..
@@ -44,11 +44,36 @@ From: ubuntu:26.04
     cd ../../..
 
 %environment
-    export PATH="/.pyenv/bin:$PATH"
-    export PYTHONPATH=.
+    export PYENV_ROOT="/.pyenv"
+    export PATH="/.venv/bin:/.pyenv/shims:/.pyenv/bin:$PATH"
+    export PYTHONPATH="/FETDD:$PYTHONPATH"
 
 %runscript
+    cd /FETDD
     python3 source/Test/testAll.py
+    #python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 10 --iterations 500
+    #python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 10 --iterations 500 --use-tdd True
+    #python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 12 --iterations 500
+    #python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 12 --iterations 500 --use-tdd True
+    #python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 14 --iterations 500
+    #python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 14 --iterations 500 --use-tdd True
+    #python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 16 --iterations 500
+    #python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 16 --iterations 500 --use-tdd True
+    #python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 18 --iterations 400
+    #python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 18 --iterations 400 --use-tdd True
+    #python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 20 --iterations 300
+    #python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 20 --iterations 300 --use-tdd True
+    python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 22 --iterations 200
+    python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 22 --iterations 200 --use-tdd True
+    python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 24 --iterations 100
+    python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 24 --iterations 100 --use-tdd True
+    python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 26 --iterations 100
+    python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 26 --iterations 100 --use-tdd True
+    python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 28 --iterations 60
+    python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 28 --iterations 60 --use-tdd True
+    python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 30 --iterations 40
+    python3 ./source/Exec/heisenberg_eswap_vqe_simple.py --qubits 30 --iterations 40 --use-tdd True
+
 
 %labels
     Author voliva-esp
