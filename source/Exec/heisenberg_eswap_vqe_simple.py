@@ -163,7 +163,7 @@ def run_vqe(num_qubits, depth, iterations, learning_rate, seed,
         if iteration % print_every == 0 or iteration == iterations - 1:
             t2 = time()
             print(
-                f"{iteration:9d}  {current_energy: .12f}\t"
+                f"{iteration:9d}\t{current_energy: .12f}\t"
                 f"{current_energy - exact_energy: .3e}\t"
                 f"{np.max(np.abs(gradient)): .3e}\t"
                 f"\t{t2 - t}"
