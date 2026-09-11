@@ -176,6 +176,8 @@ def run_vqe(num_qubits, depth, iterations, learning_rate, seed,
     final_state = statevector(circuit, parameters, values, use_tdd=use_tdd)
     final_energy = float(final_state.expectation_value(hamiltonian).real)
     fidelity = abs(exact_state.inner(final_state)) ** 2
+    import source.cpp.build.cTDD as cTDD
+    cTDD.Clear_TDD()
 
     print("\nFinal result")
     print(f"VQE energy:        {final_energy:.12f}")
