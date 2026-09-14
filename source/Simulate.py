@@ -1,3 +1,11 @@
+"""
+
+Modified by Vicente Lopez (voliva@uji.es). Modifications will be marked with @romOlivo.
+
+  - Slight optimization of PyTN_2_cTN
+
+"""
+
 from source.TDD_Q import squeezeTN, squeezeTN_ultra, TNtoCotInput, generate_close_indices, cir_2_tn_lbl, \
     get_real_qubit_num, add_inputs, add_outputs
 from source.utils import FileOutputHandler, PrintOutputHandler, HybridOutputHandler, OutputHandler
@@ -357,19 +365,21 @@ def PyTN_2_cTN(tn_lbl):
     # Create cTDD tensor network
     cTN = cTDD.TensorNetwork(tn_lbl.tn_type, tn_lbl.qubits_num)
 
+    # @romOlivo: Added for less attribute search
+    cTensor_cls = cTDD.Tensor
+    add_tensor = cTN.add_tensor
+
     # Add tensors from PyTDD TN to cTDD TN
     for ts in tn_lbl.tensors:
         # Create C++ tensor
         data = ts.data.flatten()
-        shape = ts.data.shape
+        shape = list(ts.data.shape)
         index_key = [ind.key for ind in ts.index_set]
         index_idx = [ind.idx for ind in ts.index_set]
-        name = ts.name
-        qubits_list = ts.qubits
-        depth = ts.depth
-        cTensor = cTDD.Tensor(data, list(shape), index_key, index_idx, name, qubits_list, depth)
+        # @romOlivo Changed for having less variables
+        cTensor = cTensor_cls(data, shape, index_key, index_idx, ts.name, ts.qubits, ts.depth)
         # Add C++ Tensor to C++ TN
-        cTN.add_tensor(cTensor, False)
+        add_tensor(cTensor, False)
 
     return cTN
 
