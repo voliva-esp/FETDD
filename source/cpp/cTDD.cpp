@@ -14,6 +14,7 @@
  *   - Type generalization in get_int_key for allowing smaller epi
  *   - Changed succs from vector to array for static size
  *   - Able to use to_array with TDDs of only one value (scalar)
+ *   - Optimized to_array and tdd_2_np
  */
 
 #include "cTDD.hpp"
@@ -246,7 +247,7 @@ int TDD::node_number() {
     return node_set.size();
 }
 
-// @romOivo: Modified to be able to do amplitude-simulations
+// @romOivo: Modified to be able to do amplitude-simulations and optimized
 complexArrayType TDD::to_array() {
     keyType split_pos = 0;
     std::map<keyType,int> key_repeat_num;
@@ -270,8 +271,8 @@ complexArrayType TDD::to_array() {
     }
 
     // split_pos is sort of the number of different indices
-    std::pair<keyType, std::string> pair =  *std::max_element(key_2_index.begin(), key_2_index.end(), [](const std::pair<keyType, std::string>& p1, const std::pair<keyType, std::string>& p2) {return p1.first < p2.first;});
-    split_pos = pair.first;
+    // @romOlivo: Optimized
+    split_pos = key_2_index.rbegin()->first;
 
     // Count the appearance of different keys and log in key_repeat_num
     for (keyType k = 0; k <= split_pos; k++) {
@@ -600,7 +601,11 @@ Edge np_2_tdd(TensorArray* U, const std::vector<uint>& slice, const std::vector<
 
 
 // TDD to Array conversion
+// @romOlivo Optimized
 void tdd_2_np(TensorArray* U, const Edge& edge, const keyType& split_pos, const std::vector<uint>& slice, const uint& slice_ptr, std::map<keyType, int>& key_repeat_num) {
+    // romOlivo: Base case if weight is zero
+    if (edge.weight == 0.0) return;
+
     if (split_pos == -1){ // Recursion terminal
         U->update(slice, edge.weight);
     } else {
@@ -611,18 +616,16 @@ void tdd_2_np(TensorArray* U, const Edge& edge, const keyType& split_pos, const 
         // Update the start pointer of slice slots to be split
         uint slice_ptr_new = slice_ptr + repeat_num;
 
-        // Split TDD and slice array index based on current key
-        std::vector<Edge> the_succs(succ_num); std::vector<std::vector<uint>> slice_split(succ_num, slice);
+        // Split TDD and slice array index based on current key and recursion
+        // romOlivo: Reworked to have only one reusable vector
+        std::vector<uint> next_slice = slice;
         for (uint i = 0; i < succ_num; i++) {
-            the_succs[i] = Slicing2(edge, split_pos, i);
             for (uint r = slice_ptr; r < slice_ptr_new; r++) {
-                slice_split[i][r] = i;
+                next_slice[r] = i;
             }
-        }
 
-        // Recursion
-        for (uint k = 0; k < succ_num; k++) {
-            tdd_2_np(U, the_succs[k], split_pos - 1, slice_split[k], slice_ptr_new, key_repeat_num);
+            Edge succ_edge = Slicing2(edge, split_pos, i);
+            tdd_2_np(U, succ_edge, split_pos - 1, next_slice, slice_ptr_new, key_repeat_num);
         }
     }
 }
