@@ -13,6 +13,7 @@
  *   - Fixed memory leak in to_array
  *   - Type generalization in get_int_key for allowing smaller epi
  *   - Changed succs from vector to array for static size
+ *   - Able to use to_array with TDDs of only one value (scalar)
  */
 
 #include "cTDD.hpp"
@@ -245,10 +246,19 @@ int TDD::node_number() {
     return node_set.size();
 }
 
+// @romOivo: Modified to be able to do amplitude-simulations
 complexArrayType TDD::to_array() {
     keyType split_pos = 0;
     std::map<keyType,int> key_repeat_num;
     std::map<std::string,int> var_idx;
+
+    // @romOivo: Return single value if TDD is a single value
+    if (index_set.empty()) {
+        complexArrayType vec;
+        vec.resize(1);
+        vec[0] = root.weight;
+        return vec;
+    }
 
     // Count the appearance of indices and log in var_idx
     for (const auto& idx : index_set) {
