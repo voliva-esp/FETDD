@@ -262,14 +262,11 @@ class TestSimulateBackend(unittest.TestCase):
         
     """
 
-    """
     def test_ftdd_simple_small_circuit_close_close(self):
         global creator
         circuit = create_small_circuit()
         tdd = simulate(circuit, is_input_closed=True, is_output_closed=True, backend="FTDD", handler_name="none")
-        tdd_adapted = adapt_tdd_result(tdd)
-        self.assertEqual(creator.get_small_circuit_solution_close_close(), tdd_adapted)
-    """
+        self.assertEqual(creator.get_small_circuit_solution_close_close(), tdd.to_array())
 
     def test_ftdd_simple_small_circuit_close_open(self):
         global creator
@@ -295,14 +292,11 @@ class TestSimulateBackend(unittest.TestCase):
 
     """
 
-    """
     def test_ftdd_tetris_small_circuit_close_close(self):
         global creator
         circuit = create_small_circuit()
         tdd = simulate(circuit, is_input_closed=True, is_output_closed=True, use_tetris=True, backend="FTDD", handler_name="none")
-        tdd_adapted = adapt_tdd_result(tdd)
-        self.assertEqual(creator.get_small_circuit_solution_close_close(), tdd_adapted)
-    """
+        self.assertEqual(creator.get_small_circuit_solution_close_close(), tdd.to_array())
 
     def test_ftdd_tetris_small_circuit_close_open(self):
         global creator
@@ -327,14 +321,13 @@ class TestSimulateBackend(unittest.TestCase):
         self.assertTrue(equal_tolerance(creator.get_small_circuit_solution_open_open(), tdd_adapted))
     """
 
-    """
+
     def test_ftdd_simple_medium_circuit_close_close(self):
         global creator
         circuit = create_medium_circuit()
-        tdd_adapted = adapt_tdd_result(tdd)
         tdd = simulate(circuit, is_input_closed=True, is_output_closed=True, backend="FTDD", handler_name="none")
-        self.assertEqual(creator.get_medium_circuit_solution_close_close(), tdd_adapted)
-    """
+        self.assertEqual(creator.get_medium_circuit_solution_close_close(), tdd.to_array())
+
     def test_ftdd_simple_medium_circuit_close_open(self):
         global creator
         circuit = create_medium_circuit()
