@@ -11,6 +11,8 @@
  *   - Implemented 'get_size_table' for more info about UniqueTable
  *   - Type generalization in get_int_key for allowing smaller epi
  *   - Changed succs from vector to array for static size
+ *   - clear changed so now nodes are no longer deleted and instead make them available
+ *   - Find_Or_Add_Unique_table now makes better usage of Nodes
  */
 
 
@@ -107,11 +109,20 @@ public:
 
     // Clear everything
     void clear() {
-        // clear unique table buckets
-        releaseTables();
 
-        // clear available list
-        releaseAvail();
+        // @romOlivo: Instead of deleting them, nodes are stored in the available list
+        for (auto& bucket : tables) {
+            if (!bucket) continue;
+
+            Node* tail = bucket;
+            while (tail->next) {
+                tail = tail->next;
+            }
+
+            tail->next = available;
+            available = bucket;
+            bucket = nullptr;
+        }
 
         // Reset garbage collection info
         gcRuns  = 0;
@@ -200,7 +211,7 @@ public:
     }
     
     // lookup a node in the unique table for the appropriate variable; insert it, if it has not been found
-    // @romOlivo Changed for static array size
+    // @romOlivo Changed for static array size and better node usage
     Node* Find_Or_Add_Unique_table(const keyType& v, const std::array<Edge, succ_num>& edges) {
         ++lookups;
         std::size_t hashVal = hash(v, edges);
@@ -214,14 +225,21 @@ public:
         } else { // if node not found
             // Get a new node
             Node* res;
-            // @romOlivo: This part was modified, so now available nodes can be used when it is possible.
-            if (available != nullptr) {
-                res = available;
-                available = available->next;
-                res->next = nullptr;
-            } else {
-                res = new Node();
+
+            // @romOlivo: Nodes are now multiple reserved for store it nearby in memory
+            if (available == nullptr) {
+                for (size_t i = 0; i < 1024; ++i) {
+                    Node* newNode = new Node();
+                    newNode->next = available;
+                    available = newNode;
+                }
             }
+
+            // @romOlivo: This part was modified, so now available nodes can be used when it is possible.
+            res = available;
+            available = available->next;
+            res->next = nullptr;
+
             res->key = v;
             res->edges = edges;
             res->refCnt = 0;
