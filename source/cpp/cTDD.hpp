@@ -49,7 +49,7 @@ namespace py = pybind11;
 constexpr auto byref = py::return_value_policy::reference_internal;
 
 typedef double dataType;
-typedef int8_t keyType;
+typedef uint16_t keyType;
 typedef int64_t epiKeyValue;                 // voliva-esp Added for generalizing epi-related values
 typedef uint16_t refCntType;
 typedef Eigen::VectorXcd complexArrayType;
