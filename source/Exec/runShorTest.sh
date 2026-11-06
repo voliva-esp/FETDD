@@ -27,12 +27,11 @@ circuit_qubits["graph_state"]="20 30 40 50"
 circuit_qubits["real_amplitude"]="15 20 25 30"
 circuit_qubits["amplitude_estimation"]="5 10 15 20"
 circuit_qubits["QFTec"]="20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95 100 110 120 135 150 175 200 225 250 275 300 325 350 375 400 450 500 550 600 650 700 750 800 850 900 950 1000"
-circuit_qubits["sBea"]="15 17 20 31 37 43 51 63"
-circuit_qubits["sReg"]="15 17 20 31 37 43 51 63"
-circuit_qubits["sStd"]="15 17 20 31 37 43 51 63"
+circuit_qubits["sReg"]="10 11 12 13 14 15 16 17 18 19 20 31"
+circuit_qubits["sStd"]="10 11 12 13 14 15 16 17 18 19 20 31 37 43 51 63"
 
 methods=('seq')
-circuit=("sBea" "sReg" "sStd")
+circuit=("sStd" "sReg")
 tools=('FTDD')
 index_order=('default')
 
@@ -61,7 +60,7 @@ for method in "${methods[@]}"; do
         c_full_name=${circuit_name[$curr_circuit]}
         echo " #--#>> Simulating $curr_circuit ($q qubits)..."
         for order in "${index_order[@]}"; do
-          timeout 7200 python3 source/Exec/runCircuit.py "$q" "$method" "$curr_circuit" "$c_full_name" "$tool" "$order"
+          timeout 1000 python3 source/Exec/runCircuit.py "$q" "$method" "$curr_circuit" "$c_full_name" "$tool" "$order"
         done
       done
     done
