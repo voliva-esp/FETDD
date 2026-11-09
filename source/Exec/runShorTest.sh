@@ -16,6 +16,7 @@ circuit_name["QFTec"]="qft_qec"
 circuit_name["sBea"]="shor_beauregard"
 circuit_name["sReg"]="shor_regev"
 circuit_name["sStd"]="shor_standard"
+circuit_name["sRed"]="shor_reduced"
 
 circuit_qubits["qpe"]="15 20 25 30"
 circuit_qubits["qft_indep"]="20 50 80 110"
@@ -29,9 +30,11 @@ circuit_qubits["amplitude_estimation"]="5 10 15 20"
 circuit_qubits["QFTec"]="20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95 100 110 120 135 150 175 200 225 250 275 300 325 350 375 400 450 500 550 600 650 700 750 800 850 900 950 1000"
 circuit_qubits["sReg"]="10 11 12 13 14 15 16 17 18 19 20 31"
 circuit_qubits["sStd"]="10 11 12 13 14 15 16 17 18 19 20 31 37 43 51 63"
+circuit_qubits["sBea"]="10 11 12 13 14 15 16 17 18 19 20 31 37"
+circuit_qubits["sRed"]="10 11 12 13 14 15 16 17 18 19 20 31 37"
 
 methods=('seq')
-circuit=("sStd" "sReg")
+circuit=("sBea" "sRed")
 tools=('FTDD')
 index_order=('default')
 
