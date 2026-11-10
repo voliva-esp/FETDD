@@ -55,7 +55,7 @@ for method in "${methods[@]}"; do
         c_full_name=${circuit_name[$curr_circuit]}
         echo " #--#>> Simulating $curr_circuit ($q qubits)..."
         for order in "${index_order[@]}"; do
-          timeout 7200 python3 source/Exec/runCircuit.py "$q" "$method" "$curr_circuit" "$c_full_name" "$tool" "$order"
+          time timeout 7200 python3 source/Exec/runCircuit.py "$q" "$method" "$curr_circuit" "$c_full_name" "$tool" "$order"
         done
       done
     done
